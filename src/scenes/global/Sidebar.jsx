@@ -83,7 +83,7 @@ const Sidebar = () => {
                 <Typography variant="h3" color={colors.grey[100]}>
                 sapak.app
                 </Typography>
-                <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
+                <IconButton onClick={() => setisCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
                 </IconButton>
               </Box>
