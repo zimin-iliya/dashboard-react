@@ -1,9 +1,9 @@
-import { useState } from "react";
-import logo from '../../assets/u1.jpg' // relative path to image 
-
+import logo from "../../assets/u1.jpg"; // relative path to image
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import "react-pro-sidebar/dist/css/styles.css";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import Button from "@mui/material/Button";
+
 import { Link } from "react-router-dom";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
@@ -12,36 +12,68 @@ import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import ReceiptOutlinedIcon from "@mui/icons-material/receiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-import HelpOutlineOutlinedIcon  from "@mui/icons-material/HelpOutlineOutlined";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import React, { useEffect, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+import { Auth, ThemeSupa } from "@supabase/auth-ui-react";
+import { useNavigate } from "react-router-dom";
+
+// Create a single supabase client for interacting with your database
+const supabase = createClient(
+  "https://ehqhklbwuoogzwuowrkq.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVocWhrbGJ3dW9vZ3p3dW93cmtxIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzY1NzczODcsImV4cCI6MTk5MjE1MzM4N30.5eA5tbpq3HYTbqqKje9_fnG9RDWoRPYHsLvQ3HgIt1A"
+);
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-    return (
-      <MenuItem
-        active={selected === title}
-        style={{
-          color: colors.grey[100],
-        }}
-        onClick={() => setSelected(title)}
-        icon={icon}
-      >
-        <Typography>{title}</Typography>
-        <Link to={to} />
-      </MenuItem>
-    );
-  };
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  return (
+    <MenuItem
+      active={selected === title}
+      style={{
+        color: colors.grey[100],
+      }}
+      onClick={() => setSelected(title)}
+      icon={icon}
+    >
+      <Typography>{title}</Typography>
+      <Link to={to} />
+    </MenuItem>
+  );
+};
 
-  const Sidebar = () => {
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-    const [isCollapsed, setIsCollapsed] = useState(false);
-    const [selected, setSelected] = useState("Dashboard");
+const Sidebar = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    async function getUserData() {
+      await supabase.auth.getUser().then((value) => {
+        if (value.data?.user) {
+          console.log(value.data.user);
+          setUser(value.data.user);
+        }
+      });
+    }
+    getUserData();
+  }, []);
+
+  async function signOut() {
+    const { error } = await supabase.auth.signOut();
+    if (error) console.log("Error signing out:", error.message);
+    setUser({});
+    navigate("/");
+  }
+
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [selected, setSelected] = useState("Dashboard");
   return (
     <Box
       sx={{
@@ -62,11 +94,11 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
         },
       }}
     >
-        <ProSidebar collapsed={isCollapsed}>
+      <ProSidebar collapsed={isCollapsed}>
         <Menu iconShape="square">
           {/* LOGO AND MENU ICON */}
           <MenuItem
-            onClick={() => setisCollapsed(!isCollapsed)}
+            onClick={() => setIsCollapsed(!isCollapsed)}
             icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
             style={{
               margin: "10px 0 20px 0",
@@ -81,9 +113,9 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
                 ml="15px"
               >
                 <Typography variant="h3" color={colors.grey[100]}>
-                sapak.app
+                  sapak.app
                 </Typography>
-                <IconButton onClick={() => setisCollapsed(!isCollapsed)}>
+                <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
                 </IconButton>
               </Box>
@@ -103,15 +135,15 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
               </Box>
               <Box textAlign="center">
                 <Typography
-                  variant="h2"
+                  variant="h4"
                   color={colors.grey[100]}
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  Zimin Iliya
+                  {user.email}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                   Admin
+                  Admin
                 </Typography>
               </Box>
             </Box>
@@ -179,7 +211,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
             <Item
               title="FAQ Page"
               to="/faq"
-              icon={<HelpOutlineOutlinedIcon  />}
+              icon={<HelpOutlineOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -219,6 +251,11 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
               selected={selected}
               setSelected={setSelected}
             />
+            <Box display="flex" justifyContent="center">
+              <Button variant="contained" onClick={() => signOut()}>
+                Sign out
+              </Button>
+            </Box>
           </Box>
         </Menu>
       </ProSidebar>
