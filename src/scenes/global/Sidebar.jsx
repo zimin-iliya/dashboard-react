@@ -25,8 +25,8 @@ import { useNavigate } from "react-router-dom";
 
 // Create a single supabase client for interacting with your database
 const supabase = createClient(
-  "https://ehqhklbwuoogzwuowrkq.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVocWhrbGJ3dW9vZ3p3dW93cmtxIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzY1NzczODcsImV4cCI6MTk5MjE1MzM4N30.5eA5tbpq3HYTbqqKje9_fnG9RDWoRPYHsLvQ3HgIt1A"
+  import.meta.env.VITE_REACT_APP_SUPABASE_URL,
+  import.meta.env.VITE_REACT_APP_SUPABASE_ANON_KEY
 );
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
@@ -251,7 +251,7 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Box display="flex" justifyContent="center">
+            <Box  display="flex" justifyContent="center">
               <Button variant="contained" onClick={() => signOut()}>
                 Sign out
               </Button>
