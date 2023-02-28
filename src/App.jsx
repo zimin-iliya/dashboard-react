@@ -15,7 +15,7 @@ import Login from "./scenes/login";
 // import Line from "./scenes/line";
 // import Pie from "./scenes/pie";
 // import FAQ from "./scenes/faq";
-// import GoogleCalendar from "./scenes/GoogleCalendar";
+import GoogleCalendar from "./scenes/GoogleCalendar";
 // import Geograpy from "./scenes/geograpy";
 
 function App() {
@@ -38,7 +38,7 @@ function App() {
               <Route path="/invoices" element={<Invoices/>} />
               <Route path="/form" element={<Form/>} />
               <Route path="/calendar" element={<Calendar/>} />
-              {/* <Route path="/googlecalendar" element={<GoogleCalendar/>} /> */}
+              <Route path="/googlecalendar" element={<GoogleCalendar/>} />
               {/* <Route path="/bar" element={<Bar/>} /> */}
               {/* <Route path="/pie" element={<Pie/>} /> */}
               {/* <Route path="/faq" element={<Line/>} /> */}

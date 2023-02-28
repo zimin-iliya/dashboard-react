@@ -1,6 +1,7 @@
 import { Box, TextField } from "@mui/material";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import Button from "@mui/material/Button";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../componets/Header";
 
@@ -30,6 +31,7 @@ const Form = () => {
   const isNotMobile = useMediaQuery("(min-width: 600px)");
   const handleFormSubmit = (values) => {
     console.log(values);
+    console.log("Form Submitted");
   };
   return (
     <Box m="20px">
@@ -136,6 +138,19 @@ const Form = () => {
                 sx={{ gridColumn: "span 4" }}
               />
             </Box>
+            <Button
+              sx={{
+                marginTop: "20px",
+                color: "white",
+                backgroundColor: "#3f51b5",
+              }}
+              fullWidth
+              variant="outlined"
+              size="large"
+              onClick={handleFormSubmit}
+            >
+              Submit
+            </Button>{" "}
           </form>
         )}
       </Formik>

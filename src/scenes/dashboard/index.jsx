@@ -4,7 +4,6 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
 import Header from "../../componets/Header";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
@@ -51,7 +50,6 @@ const Dashboard = () => {
 
   return (
     <Box m="20px">
-      
       <Header title="Dashboard" subtitle="Welcome to your dashboard" />
       <TextField
         fullWidth
@@ -63,18 +61,21 @@ const Dashboard = () => {
         onChange={(e) => setText(e.target.value)}
         sx={{ gridColumn: "span 2" }}
       />
+
       <Button
-        fullWidth
-        style={{
-          color: colors.primary[100],
+        sx={{
+          marginTop: "20px",
+          color: "white",
+          backgroundColor: "#3f51b5",
         }}
+        fullWidth
         variant="outlined"
         size="large"
         onClick={addTodo}
       >
         Add
       </Button>
-     
+
       {todos.map((todo) => (
         <Box m="20px" key={todo.id} display="span 4" alignItems="flex-start">
           <Card sx={{ maxWidth: 300 }}>
@@ -109,9 +110,8 @@ const Dashboard = () => {
           </Card>
         </Box>
       ))}
-       <Notes />
+      <Notes />
     </Box>
-    
   );
 };
 
